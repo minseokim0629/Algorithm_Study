@@ -4,12 +4,12 @@
 using namespace std;
 
 int map[9][9];
-int copymap[9][9];
 int N, M;
 int dx[4] = {-1, 0, 0, 1};
 int dy[4] = {0, 1, -1, 0};
 int answer = 0;
 
+//지도 복사
 void mapcopy(int (*a)[9], int (*b)[9])
 {
     for (int i = 0; i < N; i++)
@@ -21,10 +21,11 @@ void mapcopy(int (*a)[9], int (*b)[9])
     }
 }
 
+//바이러스 퍼뜨리기(BFS)
 void virusSpread()
 {
     int Spreadmap[9][9];
-    mapcopy(Spreadmap, copymap);
+    mapcopy(Spreadmap, map);
     queue<pair<int, int>> q;
     int cnt = 0;
 
@@ -68,6 +69,7 @@ void virusSpread()
     answer = max(answer, cnt);
 }
 
+//벽 세우기
 void wall(int cnt)
 {
     if (cnt == 3)
@@ -80,12 +82,12 @@ void wall(int cnt)
     {
         for (int j = 0; j < M; j++)
         {
-            if (copymap[i][j] == 0)
+            if (map[i][j] == 0)
             {
-                copymap[i][j] = 1;
+                map[i][j] = 1;
                 wall(cnt + 1);
                 // 모든 경우를 고려해야 하므로 끝나면 다시 되돌려주기
-                copymap[i][j] = 0;
+                map[i][j] = 0;
             }
         }
     }
@@ -110,10 +112,9 @@ int main()
         {
             if (map[i][j] == 0)
             {
-                mapcopy(copymap, map);
-                copymap[i][j] = 1;
+                map[i][j] = 1;
                 wall(1);
-                copymap[i][j] = 0;
+                map[i][j] = 0;
             }
         }
     }
